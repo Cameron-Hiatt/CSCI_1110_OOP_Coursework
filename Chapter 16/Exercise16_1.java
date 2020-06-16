@@ -80,7 +80,7 @@ public class Exercise16_1 extends Application
 		pane.setTop(colorPane);
 		
 		Scene scene = new Scene(pane, 500, 200);
-		primaryStage.setTitle("Move the Ball"); // Set the stage title
+		primaryStage.setTitle("Exercise 16-1"); // Set the stage title
 		primaryStage.setScene(scene); // Place the scene in the stage
 		primaryStage.show(); // Display the stage
 		
