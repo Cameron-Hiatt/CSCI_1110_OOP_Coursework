@@ -37,8 +37,8 @@ public class Exercise16_1 extends Application
 		arrowPane.getChildren().addAll(buttonLeft, buttonRight);
 		arrowPane.setAlignment(Pos.CENTER);
 		arrowPane.setStyle("-fx-border-color: black");
-		buttonLeft.setOnAction(e -> text.setX(text.getX() - 10));
-		buttonRight.setOnAction(e -> text.setX(text.getX() + 10));
+		buttonLeft.setOnAction(e -> moveTextLeft(text));
+		buttonRight.setOnAction(e -> moveTextRight(text));
 		
 		//Creates HBox and ToggleGroup for the radio buttons
 		HBox colorPane = new HBox();
@@ -89,5 +89,19 @@ public class Exercise16_1 extends Application
 	public static void main(String[] args) 
 	{
 		launch(args);
+	}
+	
+	//Method for moving text to the left and not letting it past the screen
+	public void moveTextLeft(Text text)
+	{
+		if (text.getX() - 10 >= 0)
+			text.setX(text.getX() - 10);
+	}
+	
+	//Method ofr moving text to the right and not letting it past the screen
+	public void moveTextRight(Text text)
+	{
+		if (text.getX() + 10 <= 380)
+			text.setX(text.getX() + 10);
 	}
 }
