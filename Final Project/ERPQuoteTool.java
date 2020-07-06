@@ -6,14 +6,6 @@
 
 import java.util.Scanner;
 
-/*---------------------------------------------------------------------------------------------------------------------* 
-|TO DO LIST:
-|	> Make MainGUI.java the main driver <
-|	> Separate the methods and such out into a more organized format while retaining how it works right now <
-|	> Make Calculator class with methods to calculate the proper customer prices <
-|	> Create a GUI that replaces the UI that goes on in the current program 
-*----------------------------------------------------------------------------------------------------------------------*/
-
 
 /**
  * <h1>JavaDoc Test</h1>
