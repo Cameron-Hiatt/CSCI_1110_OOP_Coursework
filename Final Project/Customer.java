@@ -8,6 +8,10 @@ import java.util.Scanner;
 
 public class Customer 
 {
+	public static String[] productName =  {"4Port", "4Port PRI", "8Port","8Port PRI"};
+	public static int[] premiumProductPrice = {1000, 1500, 1600, 2100};
+	public static int[] independentProductPrice = {1500, 2000, 2100, 2600};
+	
 	/**
 	 * The premiumCustomer method prompts the user for information based on their answer given in the main method. 
 	 * The main difference in this method from future methods is that it calls a specific calculation method for a premium quote 
@@ -15,94 +19,20 @@ public class Customer
 	 * 
 	 * <pre>Example: premiumCustomer();</pre>
 	 */
-	public static void premiumCustomer()
+	public static int[] premiumCustomer(int[] userInput, int contractLength)
 	{
-		Scanner input = new Scanner(System.in);
 		
 		int[] quote = new int[3];
-		String[] productName =  {"4Port", "4Port PRI", "8Port","8Port PRI"};
-		int[] productPrice = {1000, 1500, 1600, 2100};//8Port, 8Port PRI cost respectively
-		
-		String[] serviceName = {"Telephone Line", "Fax Line", "Fire Alarm", "Security Alarm", "Elevator Alarm", "Internet Failover", "Emergency Call Box", "PRI Telephone Line"};
 
-		int[] userSelection = new int[8];
+		int[] userSelection = userInput.clone();
 		int userContract = 0;
-		boolean validity = false;
-		int unitType = 0;
 		
-		System.out.println("Please select the services to be used up to 8 total");
-		System.out.println("__________________________________________________________________"
-				+ "_______________________________________________________________________");
-		System.out.println("Input the number next to the desired service followed by a space, "
-				+ "then press enter when all desired services (up to 8 total) are selected");
-		System.out.println("Example: 1 2 3 8 0 0 0 0");
-		System.out.println("__________________________________________________________________"
-				+ "_______________________________________________________________________");
-		System.out.println("0. No Service\n"
-						 + "1. Telephone Line\n"
-						 + "2. Fax Line\n"
-						 + "3. Fire Alarm\n"
-						 + "4. Security Alarm\n"
-						 + "5. Elevator Alarm\n"
-						 + "6. Internet Failover\n"
-						 + "7. Emergency Call Box\n"
-						 + "8. PRI Telephone Line\n");
+		userContract = contractLength;
 		
-		//A do while loop that will repeat until valid integer input is given from the user
-		do
-		{
-			validity = true;
-			System.out.print("Your input: ");
-			for(int i = 0; i < userSelection.length; i++)
-				userSelection[i] = input.nextInt();
-			
-			//for loop that checks validity of user's input
-			for(int j = 0; j < userSelection.length; j++)
-				if(userSelection[j] < 0 || userSelection[j] > 8)
-					validity = false;
-			
-			//Displays error message if invalid input was found
-			if(validity == false)
-				System.out.println("One or more of your inputs was invalid, please try again.");
-			
-		}while(validity == false);
+		quote = Calculator.calculatePremiumQuote(userSelection, userContract).clone();
 		
-		System.out.println("Please select how long this service contract will be");
-		System.out.println("_______________________________________________________________");
-		System.out.println("Input one of the numbers next to the projected contract length");
-		System.out.println("_______________________________________________________________");
-		System.out.println("1. 12 Months\n"
-					 	 + "2. 24 Months\n"
-						 + "3. 36 Months\n"
-						 + "4. 48 Months\n"
-						 + "5. 60 Months\n"
-						 + "6. Exit Program\n");
-		System.out.print("Your input: ");
-		
-		//a do while loop that contains a nested while loop to prevent any invalid input from being accepted and exiting the program early
-		do
-		{
-			while(!input.hasNextInt())
-			{
-				input.next();
-				System.out.print("Invalid input\nPlease enter a number between 1-5: ");
-			}
-			userContract = input.nextInt();
-			
-			if(userContract == 6)
-				System.exit(0);
-			
-			if(userContract > 5 || userContract < 1)
-				System.out.print("Invalid input\nPlease enter a number between 1-5: ");
-			
-		}while(userContract > 5 || userContract < 1);
-		
-		quote = Calculator.calculatePremiumQuote(userSelection, userContract);
-		
-		for(int j = 0; j < productPrice.length; j++)
-			if(quote[0] == productPrice[j])
-				unitType = j;
-		
+		return quote;
+		/*
 		System.out.println("Based on your needs of the following services:");
 		for(int i = 0; i < userSelection.length; i++)
 			if(userSelection[i] != 0)
@@ -114,6 +44,7 @@ public class Customer
 			System.out.println("Total Cost at end of contract: $" + quote[2]);
 			
 			input.close();
+		*/
 		
 	}//End of premiumCustomer method
 	
@@ -124,94 +55,26 @@ public class Customer
 	 * 
 	 * <pre>Example: independentCustomer();</pre>
 	 */
- 	public static void independentCustomer()
+ 	public static int[] independentCustomer(int[] userInput, int contractLength)
 	{
- 		Scanner input = new Scanner(System.in);
 		
 		int[] quote = new int[3];
-		String[] productName =  {"4Port", "4Port PRI", "8Port","8Port PRI"};
-		int[] productPrice = {1500, 2000, 2100, 2600};//8Port, 8Port PRI cost respectively
 		
-		String[] serviceName = {"Telephone Line", "Fax Line", "Fire Alarm", "Security Alarm", "Elevator Alarm", "Internet Failover", "Emergency Call Box", "PRI Telephone Line"};
-
 		int[] userSelection = new int[8];
 		int userContract = 0;
-		boolean validity = false;
 		int unitType = 0;
 		
-		System.out.println("Please select the services to be used up to 8 total");
-		System.out.println("__________________________________________________________________"
-				+ "_______________________________________________________________________");
-		System.out.println("Input the number next to the desired service followed by a space, "
-				+ "then press enter when all desired services (up to 8 total) are selected");
-		System.out.println("Example: 1 2 3 8 0 0 0 0");
-		System.out.println("__________________________________________________________________"
-				+ "_______________________________________________________________________");
-		System.out.println("0. No Service\n"
-						 + "1. Telephone Line\n"
-						 + "2. Fax Line\n"
-						 + "3. Fire Alarm\n"
-						 + "4. Security Alarm\n"
-						 + "5. Elevator Alarm\n"
-						 + "6. Internet Failover\n"
-						 + "7. Emergency Call Box\n"
-						 + "8. PRI Telephone Line\n");
-		
-		//A do while loop that will repeat until valid integer input is given from the user
-		do
-		{
-			validity = true;
-			System.out.print("Your input: ");
-			for(int i = 0; i < userSelection.length; i++)
-				userSelection[i] = input.nextInt();
-			
-			//for loop that checks validity of user's input
-			for(int j = 0; j < userSelection.length; j++)
-				if(userSelection[j] < 0 || userSelection[j] > 8)
-					validity = false;
-			
-			//Displays error message if invalid input was found
-			if(validity == false)
-				System.out.println("One or more of your inputs was invalid, please try again.");
-			
-		}while(validity == false);
-		
-		System.out.println("Please select how long this service contract will be");
-		System.out.println("_______________________________________________________________");
-		System.out.println("Input one of the numbers next to the projected contract length");
-		System.out.println("_______________________________________________________________");
-		System.out.println("1. 12 Months\n"
-					 	 + "2. 24 Months\n"
-						 + "3. 36 Months\n"
-						 + "4. 48 Months\n"
-						 + "5. 60 Months\n"
-						 + "6. Exit Program\n");
-		System.out.print("Your input: ");
-		
-		//a do while loop that contains a nested while loop to prevent any invalid input from being accepted and exiting the program early
-		do
-		{
-			while(!input.hasNextInt())
-			{
-				input.next();
-				System.out.print("Invalid input\nPlease enter a number between 1-5: ");
-			}
-			userContract = input.nextInt();
-			
-			if(userContract == 6)
-				System.exit(0);
-			
-			if(userContract > 5 || userContract < 1)
-				System.out.print("Invalid input\nPlease enter a number between 1-5: ");
-			
-		}while(userContract > 5 || userContract < 1);
+		userSelection = userInput.clone();
+		userContract = contractLength;
 		
 		quote = Calculator.calculateIndependentQuote(userSelection, userContract);
 		
-		for(int j = 0; j < productPrice.length; j++)
-			if(quote[0] == productPrice[j])
+		for(int j = 0; j < independentProductPrice.length; j++)
+			if(quote[0] == independentProductPrice[j])
 				unitType = j;
 		
+		return quote;
+		/*
 		System.out.println("Based on your needs of the following services:");
 		for(int i = 0; i < userSelection.length; i++)
 			if(userSelection[i] != 0)
@@ -222,7 +85,9 @@ public class Customer
 			System.out.println("Monthly Cost: $" + quote[1]);
 			System.out.println("Total Cost at end of contract: $" + quote[2]);
 		
-			input.close();
+			//input.close();
+			 */
 		
 	}//end of independentCustomer method
+ 	
 }

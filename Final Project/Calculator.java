@@ -19,6 +19,8 @@ public class Calculator
 	 */
 	public static int[] calculatePremiumQuote(int[] services, int contract)
 	{
+		
+		System.out.println("This here did done go through");
 		int[] result = new int[3];
 		int unitCost = 0;
 		int monthlyCost = 0;
