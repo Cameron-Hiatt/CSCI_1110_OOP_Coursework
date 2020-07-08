@@ -26,8 +26,8 @@ import javafx.geometry.Insets;
 |	> Make MainGUI.java the main driver <
 |	> Separate the methods and such out into a more organized format while retaining how it works right now <
 |	> Make Calculator class with methods to calculate the proper customer prices <
-|	> Make Radio Buttons only select one at a time (if selecting one doesn't trigger the new window prompts)
-|	> Create a GUI that replaces the UI that goes on in the current program 
+|	> Make Radio Buttons only select one at a time (if selecting one doesn't trigger the new window prompts)<
+|	> Create a GUI that replaces the UI that goes on in the current program<
 *----------------------------------------------------------------------------------------------------------------------*/
 
 public class MainGUI extends Application
@@ -391,42 +391,66 @@ public class MainGUI extends Application
 					iterateVar = Integer.parseInt(telephoneInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(1);
-					
+							requestedServices.add(serviceName[0]);
+						}
+							
 					iterateVar = Integer.parseInt(faxInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(2);
+							requestedServices.add(serviceName[1]);
+						}
 					
 					iterateVar = Integer.parseInt(fireInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(3);
+							requestedServices.add(serviceName[2]);
+						}
 					
 					iterateVar = Integer.parseInt(securityInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(4);
+							requestedServices.add(serviceName[3]);
+						}
 					
 					iterateVar = Integer.parseInt(elevatorInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(5);
+							requestedServices.add(serviceName[4]);
+						}
 					
 					iterateVar = Integer.parseInt(internetInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(6);
+							requestedServices.add(serviceName[5]);
+						}
 					
 					iterateVar = Integer.parseInt(callBoxInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(7);
+							requestedServices.add(serviceName[6]);
+						}
 					
 					iterateVar = Integer.parseInt(priInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
+						{
 							neededServicesHolder.add(8);
+							requestedServices.add(serviceName[7]);
+						}
 					
 					//adds 0's to fill the rest of the array up to 8, this is important for the calculator to run correctly
 					if (neededServicesHolder.size() != 8)
@@ -488,9 +512,14 @@ public class MainGUI extends Application
 							if(quote[0] == independentProductPrice[j])
 								unitType = j;
 						
+						String needs = new String();
+						
+						for(int i = 0; i < requestedServices.size(); i++)
+							needs += "-" + requestedServices.get(i) + "\n";
+						
 						StackPane pane5 = new StackPane();
 						VBox quotePricing = new VBox(5);
-						Label quoteTitle = new Label("Based on your needs, your quote is as follows:");
+						Label quoteTitle = new Label("Based on your needs of the following services\n" + needs + "\nYour custom quote is as follows:");
 						Label unitModelNeeded = new Label("Unit model needed:					" + productName[unitType]);
 						Label unitPrice = new Label("Unit model price:						$" + quote[0]);
 						Label monthlyCost = new Label("Monthly Cost:							$" + quote[1]);
@@ -499,14 +528,10 @@ public class MainGUI extends Application
 						quotePricing.setAlignment(Pos.CENTER_LEFT);
 						quotePricing.setPadding(new Insets(30, 50, 50, 150));
 						
-						for(int i = 0; i < neededServices.length; i++)
-							if(neededServices[i] != 0)
-								System.out.print(serviceName[neededServices[i] - 1] + ", ");
-							
-							quotePricing.getChildren().addAll(quoteTitle, unitModelNeeded, unitPrice, monthlyCost, totalCost);
-							pane5.getChildren().add(quotePricing);
-							Scene scene4 = new Scene(pane5, 600, 400);
-							primaryStage.setScene(scene4); // Place the scene in the stage
+						quotePricing.getChildren().addAll(quoteTitle, unitModelNeeded, unitPrice, monthlyCost, totalCost);
+						pane5.getChildren().add(quotePricing);
+						Scene scene4 = new Scene(pane5, 600, 400);
+						primaryStage.setScene(scene4); // Place the scene in the stage
 						
 					});//end of calculation for independent customer quote
 					
