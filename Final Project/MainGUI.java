@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -21,18 +20,11 @@ import java.util.*;
 import javafx.scene.control.ToggleGroup;
 import javafx.geometry.Insets;
 
-/*---------------------------------------------------------------------------------------------------------------------* 
-|TO DO LIST:
-|	> Make MainGUI.java the main driver <
-|	> Separate the methods and such out into a more organized format while retaining how it works right now <
-|	> Make Calculator class with methods to calculate the proper customer prices <
-|	> Make Radio Buttons only select one at a time (if selecting one doesn't trigger the new window prompts)<
-|	> Create a GUI that replaces the UI that goes on in the current program<
-*----------------------------------------------------------------------------------------------------------------------*/
-
 public class MainGUI extends Application
 {
 	
+	//static variables to be used throughout the program, this allows for them to extend to all possible branches of the UI 
+	//rather than making duplicates as someone may progress through different branches of the UI 
 	public static int contractLength = 0;
 	public static int contractLengthNum = 0;
 	public static String[] productName =  {"4Port", "4Port PRI", "8Port","8Port PRI"};
@@ -82,6 +74,7 @@ public class MainGUI extends Application
 				StackPane pane3 = new StackPane();
 				VBox services = new VBox(5);
 				
+				//Hboxes containing the service title and a text field that allows the user to input how many of those services they need
 				HBox telephoneService = new HBox(4);
 				telephoneService.setAlignment(Pos.CENTER);
 				Label telephoneLabel = new Label("1. Telephone");
@@ -146,12 +139,15 @@ public class MainGUI extends Application
 						+ "\nservice up to 8 total services, then press next. (leave value as 0 if that service is not needed)");
 				servicesPrompt.setTextAlignment(TextAlignment.CENTER);
 				
-				//this takes the user input amounts and puts them in to an array that will be sent to the Customer class which will then aid in calculating a premium quote.
+				//this button will move to the next scene of the UI and also accept the user input given for the desired services
 				nextButton.setOnAction(e4 -> {
 					int iterateVar = 0;
 					ArrayList<Integer> neededServicesHolder = new ArrayList<Integer>();//Creating arraylist  
 					ToggleGroup monthButtons = new ToggleGroup();
 					
+					//these blocks of code take each text field value and adds it to an array list so that it can be used later in calculating the pricing
+					// of their overall plan. It also adds the name of that service to an array list of strings to be used later in displaying the 
+					// services the user chose for the quote
 					iterateVar = Integer.parseInt(telephoneInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
@@ -216,7 +212,7 @@ public class MainGUI extends Application
 							requestedServices.add(serviceName[7]);
 						}
 					
-					//adds 0's to fill the rest of the array up to 8, this is important for the calculator to run correclty
+					//adds 0's to fill the rest of the array up to 8, this is important for the calculator to run correctly
 					if (neededServicesHolder.size() != 8)
 					{
 						do
@@ -230,11 +226,13 @@ public class MainGUI extends Application
 					for(int j = 0; j < neededServicesHolder.size(); j++)
 						neededServices[j] = neededServicesHolder.get(j);
 					
+					//beginning of this scene's UI that asks how long the user plans to contract for
 					StackPane pane4 = new StackPane();
 					VBox months = new VBox(5);
 					Label monthsPrompt = new Label("Please select how long this service contract will be");
 					months.setAlignment(Pos.CENTER);
 					
+					//radio buttons that are then set in a toggle group (so only one can be selected at a time) that display the contract plans available
 					RadioButton option1 = new RadioButton("12 Months");
 					RadioButton option2 = new RadioButton("24 Months");
 					RadioButton option3 = new RadioButton("36 Months");
@@ -247,17 +245,21 @@ public class MainGUI extends Application
 					option4.setToggleGroup(monthButtons);
 					option5.setToggleGroup(monthButtons);
 					
+					//this assigns a number to the contractLength variable based on their decision, this is important for the calculator to run correctly
 					option1.setOnAction(e6 -> contractLength = 1);
 					option2.setOnAction(e7 -> contractLength = 2);
 					option3.setOnAction(e8 -> contractLength = 3);
 					option4.setOnAction(e9 -> contractLength = 4);
 					option5.setOnAction(e10 -> contractLength = 5);
 					
+					//the following opens the new scene that will display the final quote, this also sets off the calculation of the prices based on the users
+					//previous decisions
 					Button nextButton2 = new Button("Next");
 					nextButton2.setOnAction(e5 -> {
 						int[] quote = new int[8];
 						quote = Calculator.calculatePremiumQuote(neededServices, contractLength).clone();
 						
+						//this switch statement assigns their contract length to a variable to be used in the display of the users quote. 
 						switch (contractLength)
 						{
 							case 1: contractLengthNum = 12;
@@ -272,15 +274,18 @@ public class MainGUI extends Application
 								break;
 						}
 						
+						//this finds the type of unit needed and puts it in a variable to be used in displaying the quote
 						for(int j = 0; j < premiumProductPrice.length; j++)
 							if(quote[0] == premiumProductPrice[j])
 								unitType = j;
 						
+						//string and for loop to be used in displaying the requested services previously by the user
 						String needs = new String();
 						
 						for(int i = 0; i < requestedServices.size(); i++)
 							needs += "-" + requestedServices.get(i) + "\n";
 						
+						//displays the quote in an asthetic way
 						StackPane pane5 = new StackPane();
 						VBox quotePricing = new VBox(5);
 						Label quoteTitle = new Label("Based on your needs of the following services\n" + needs + "\nYour custom quote is as follows:");
@@ -318,6 +323,7 @@ public class MainGUI extends Application
 				StackPane pane3 = new StackPane();
 				VBox services = new VBox(5);
 				
+				//Hboxes containing the service title and a text field that allows the user to input how many of those services they need
 				HBox telephoneService = new HBox(4);
 				telephoneService.setAlignment(Pos.CENTER);
 				Label telephoneLabel = new Label("1. Telephone");
@@ -382,12 +388,15 @@ public class MainGUI extends Application
 						+ "\nservice up to 8 total services, then press next. (leave value as 0 if that service is not needed)");
 				servicesPrompt.setTextAlignment(TextAlignment.CENTER);
 				
-				//this takes the user input amounts and puts them in to an array that will be sent to the Customer class which will then aid in calculating a premium quote.
+				//this button will move to the next scene of the UI and also accept the user input given for the desired services
 				nextButton.setOnAction(e4 -> {
 					int iterateVar = 0;
 					ArrayList<Integer> neededServicesHolder = new ArrayList<Integer>();//Creating arraylist  
 					ToggleGroup monthButtons = new ToggleGroup();
 					
+					//these blocks of code take each text field value and adds it to an array list so that it can be used later in calculating the pricing
+					// of their overall plan. It also adds the name of that service to an array list of strings to be used later in displaying the 
+					// services the user chose for the quote
 					iterateVar = Integer.parseInt(telephoneInput.getText());
 					if(iterateVar != 0)
 						for(int i = 0; i < iterateVar; i++)
