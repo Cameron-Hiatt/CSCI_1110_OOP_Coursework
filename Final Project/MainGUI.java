@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import java.util.*;  
 import javafx.scene.control.ToggleGroup;
 import javafx.geometry.Insets;
+import java.io.*;
 
 public class MainGUI extends Application
 {
@@ -33,7 +34,13 @@ public class MainGUI extends Application
 	public static int unitType = 0;
 	public static String[] serviceName = {"Telephone Line", "Fax Line", "Fire Alarm", "Security Alarm", "Elevator Alarm", "Internet Failover", "Emergency Call Box", "PRI Telephone Line"};
 	public static ArrayList<String> requestedServices = new ArrayList<String>();//Creating arraylist  
+	public static Customer customer;
 	
+	
+	/**
+	 * The start method is the main method for controlling this program's User Interface. It has multiple nested scenes that the user moves through as they input information
+	 * that make up the overall program UI. It returns void. 
+	 */
 	public void start(Stage primaryStage) throws Exception 
 	{
 		//Creates the opening window 
@@ -62,9 +69,30 @@ public class MainGUI extends Application
 		button.setOnAction(e -> {
 			StackPane pane2 = new StackPane();
 			VBox customerTypes = new VBox(10);
-			customerTypes.setAlignment(Pos.CENTER); 
+			customerTypes.setAlignment(Pos.CENTER);
 			
-			Label customerSelectionPrompt = new Label("Please select which type of customer best applies to your company");
+			Label customerSelectionPrompt = new Label("Please input your information\nand select which type of customer best applies to your company");
+			
+			HBox name = new HBox(4);
+			name.setAlignment(Pos.CENTER);
+			Label nameLabel = new Label("Name: ");
+			TextField nameInput = new TextField("Your Name Here");
+			nameInput.setAlignment(Pos.CENTER);
+			name.getChildren().addAll(nameLabel, nameInput);
+			
+			HBox number = new HBox(4);
+			number.setAlignment(Pos.CENTER);
+			Label numberLabel = new Label("Phone Number: ");
+			TextField numberInput = new TextField("Ex. 222-222-2222");
+			numberInput.setAlignment(Pos.CENTER);
+			number.getChildren().addAll(numberLabel, numberInput);
+			
+			HBox email = new HBox(4);
+			email.setAlignment(Pos.CENTER);
+			Label emailLabel = new Label("Email: ");
+			TextField emailInput = new TextField("Your Email Here");
+			emailInput.setAlignment(Pos.CENTER);
+			email.getChildren().addAll(emailLabel, emailInput);
 			
 			RadioButton premiumCust = new RadioButton("Premium Business Customer");
 			RadioButton independentCust = new RadioButton("Independent Business Customer");
@@ -73,6 +101,8 @@ public class MainGUI extends Application
 			premiumCust.setOnAction(e3 -> {
 				StackPane pane3 = new StackPane();
 				VBox services = new VBox(5);
+				
+				customer = new Customer(nameInput.getText(), numberInput.getText(), emailInput.getText());
 				
 				//Hboxes containing the service title and a text field that allows the user to input how many of those services they need
 				HBox telephoneService = new HBox(4);
@@ -297,7 +327,34 @@ public class MainGUI extends Application
 						quotePricing.setAlignment(Pos.CENTER_LEFT);
 						quotePricing.setPadding(new Insets(30, 50, 50, 150));
 						
-						quotePricing.getChildren().addAll(quoteTitle, unitModelNeeded, unitPrice, monthlyCost, totalCost);
+						//final variables so they can be used in saving the text file below. Wouldn't let me use the normal variables unless they were final
+						final String needs2 = needs;
+						final int[] quoteTxt = quote.clone();
+						
+						Button saveButton = new Button("Save to Text File");
+						saveButton.setOnAction(e11 -> {
+							try {
+								PrintWriter output = new PrintWriter(new FileOutputStream(customer.getName() + "EpikQuote.txt", false));
+								output.write(customer.toString());
+								output.write("Based on your needs of the following services\n" + needs2 + "\nYour custom quote is as follows:\n");
+								output.write("Unit model needed:						" + productName[unitType] + "\n");
+								output.write("Unit model price:						$" + quoteTxt[0] + "\n");
+								output.write("Monthly Cost:							$" + quoteTxt[1] + "\n");
+								output.write("Total Cost at end of " + contractLengthNum + " month contract:	$" + quoteTxt[2]);
+								output.close();
+							} catch (FileNotFoundException e1) {
+								e1.printStackTrace();
+							}
+							
+							Label thankYou = new Label("Thank you for using the Epik quote tool! \n"
+									+ "Your quote has been saved,\nyou may exit out of the window now.");
+							quotePricing.setAlignment(Pos.CENTER);
+							quotePricing.setPadding(new Insets(10, 50, 50, 50));
+							quotePricing.getChildren().clear();
+							quotePricing.getChildren().add(thankYou);
+						});
+						
+						quotePricing.getChildren().addAll(quoteTitle, unitModelNeeded, unitPrice, monthlyCost, totalCost, saveButton);
 						pane5.getChildren().add(quotePricing);
 						Scene scene4 = new Scene(pane5, 600, 400);
 						primaryStage.setScene(scene4); // Place the scene in the stage
@@ -322,6 +379,8 @@ public class MainGUI extends Application
 			independentCust.setOnAction(e3 -> {
 				StackPane pane3 = new StackPane();
 				VBox services = new VBox(5);
+				
+				customer = new Customer(nameInput.getText(), numberInput.getText(), emailInput.getText());
 				
 				//Hboxes containing the service title and a text field that allows the user to input how many of those services they need
 				HBox telephoneService = new HBox(4);
@@ -537,7 +596,35 @@ public class MainGUI extends Application
 						quotePricing.setAlignment(Pos.CENTER_LEFT);
 						quotePricing.setPadding(new Insets(30, 50, 50, 150));
 						
-						quotePricing.getChildren().addAll(quoteTitle, unitModelNeeded, unitPrice, monthlyCost, totalCost);
+						//final variables so they can be used in saving the text file below. Wouldn't let me use the normal variables unless they were final
+						final String needs2 = needs;
+						final int[] quoteTxt = quote.clone();
+						
+						//this button when pressed will save the quote given to a text file called EpikQuote.txt, it will overwrite said file if one already exists
+						Button saveButton = new Button("Save to Text File");
+						saveButton.setOnAction(e11 -> {
+							try {
+								PrintWriter output = new PrintWriter(new FileOutputStream(customer.getName() + "EpikQuote.txt", false));
+								output.write(customer.toString());
+								output.write("Based on your needs of the following services\n" + needs2 + "\nYour custom quote is as follows:\n");
+								output.write("Unit model needed:						" + productName[unitType] + "\n");
+								output.write("Unit model price:						$" + quoteTxt[0] + "\n");
+								output.write("Monthly Cost:							$" + quoteTxt[1] + "\n");
+								output.write("Total Cost at end of " + contractLengthNum + " month contract:	$" + quoteTxt[2]);
+								output.close();
+							} catch (FileNotFoundException e1) {
+								e1.printStackTrace();
+							}
+							
+							Label thankYou = new Label("Thank you for using the Epik quote tool! \n"
+									+ "Your quote has been saved,\nyou may exit out of the window now.");
+							quotePricing.setAlignment(Pos.CENTER);
+							quotePricing.setPadding(new Insets(10, 50, 50, 50));
+							quotePricing.getChildren().clear();
+							quotePricing.getChildren().add(thankYou);
+						});
+						
+						quotePricing.getChildren().addAll(quoteTitle, unitModelNeeded, unitPrice, monthlyCost, totalCost, saveButton);
 						pane5.getChildren().add(quotePricing);
 						Scene scene4 = new Scene(pane5, 600, 400);
 						primaryStage.setScene(scene4); // Place the scene in the stage
@@ -558,7 +645,7 @@ public class MainGUI extends Application
 				primaryStage.setScene(scene2); // Place the scene in the stage
 			});//end of independent customer interface
 			
-			customerTypes.getChildren().addAll(customerSelectionPrompt, premiumCust, independentCust);
+			customerTypes.getChildren().addAll(customerSelectionPrompt, name, number, email, premiumCust, independentCust);
 			pane2.getChildren().add(customerTypes);
 			Scene scene1 = new Scene(pane2, 600, 400);
 			primaryStage.setScene(scene1); // Place the scene in the stage
@@ -570,6 +657,11 @@ public class MainGUI extends Application
 		primaryStage.show(); // Display the stage
 	}
 	
+	/**
+	 * The main method exists because some IDEs require having it in order to run a javafx GUI. This was written using the Eclipse IDE and thus it needed the main for the start method to run. 
+	 * 
+	 * @param args (String array, main method accepts command line arguments)
+	 */
 	public static void main(String[] args) 
 	{
 		launch(args);
